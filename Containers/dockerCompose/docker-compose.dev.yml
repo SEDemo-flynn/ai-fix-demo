@@ -1,0 +1,33 @@
+version: '3.8'
+
+# Development-only compose file with additional debug services
+services:
+  # Extends main compose file
+  app:
+    # VULNERABILITY: Remote debugging enabled (Medium Severity)
+    command: >
+      sh -c "npm install &&
+             node --inspect=0.0.0.0:9229 src/server.js"
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    environment:
+      # VULNERABILITY: All hosts allowed in CORS (Low Severity)
+      CORS_ALLOW_ORIGIN: "*"
+      # VULNERABILITY: Extended logging of sensitive data (Medium Severity)
+      LOG_LEVEL: "debug"
+      LOG_SENSITIVE_DATA: "true"
+
+  # VULNERABILITY: Adminer database management exposed (Medium Severity)
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  # VULNERABILITY: Redis instance with no password (Medium Severity)
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"

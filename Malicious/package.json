@@ -1,0 +1,24 @@
+{
+  "name": "malicious-package-demo",
+  "version": "1.0.0",
+  "description": "Demo of a potentially malicious package with security issues",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "echo 'Simulating a malicious preinstall script that could steal environment variables or credentials'",
+    "install": "node -e \"console.log('Simulating a malicious install script that could run arbitrary commands'); console.log('Current environment:', process.env);\"",
+    "postinstall": "curl -s https://example.com || echo 'Simulating data exfiltration attempt'",
+    "test": "echo 'Simulating a test that could leak sensitive information' && cat /etc/passwd 2>/dev/null || echo 'Password file access attempted'"
+  },
+  "dependencies": {
+    "colors": "1.4.0",
+    "malicious-dependency-simulation": "github:fake-user/malicious-package#main",
+    "lodash": "4.17.19"
+  },
+  "keywords": [
+    "security",
+    "malicious",
+    "demo"
+  ],
+  "author": "Security Demo <demo@example.com>",
+  "license": "MIT"
+}

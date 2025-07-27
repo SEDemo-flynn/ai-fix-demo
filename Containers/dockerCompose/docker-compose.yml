@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # VULNERABILITY: Using default database credentials (Medium Severity)
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    # VULNERABILITY: Exposing database port to host (Medium Severity)
+    ports:
+      - "5432:5432"
+
+  # VULNERABILITY: Using latest tag (Low Severity)
+  app:
+    image: node:latest
+    working_dir: /app
+    volumes:
+      - ./:/app
+    # VULNERABILITY: Running as root (Medium Severity)
+    # Should use user directive but doesn't
+    command: >
+      sh -c "npm install &&
+             npm start"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      # VULNERABILITY: Hardcoded credentials (High Severity)
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydb
+      # VULNERABILITY: Debug mode enabled (Low Severity)
+      DEBUG: 'true'
+      NODE_ENV: development
+
+volumes:
+  pg-data:
