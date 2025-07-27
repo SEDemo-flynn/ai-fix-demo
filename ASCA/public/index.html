@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerable Demo App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .header { background: #ff4757; color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        .warning { background: #ffa502; color: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .section { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #3742fa; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #2f3542; }
+        .danger { background: #ff3742; }
+        .result { background: #e8f4fd; padding: 15px; margin: 15px 0; border-radius: 4px; border: 1px solid #bee5eb; }
+        .examples { background: #fff3cd; padding: 15px; margin: 10px 0; border-radius: 4px; border: 1px solid #ffeaa7; }
+        .code { background: #2d3436; color: #00b894; padding: 8px; margin: 5px 0; border-radius: 3px; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Vulnerable Demo Application</h1>
+            <p>Security Testing Environment</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ WARNING:</strong> This contains intentional vulnerabilities for educational purposes only!
+        </div>
+
+        <div class="section">
+            <h2>🗄️ SQL Injection Demo</h2>
+
+            <p><strong>Demo Users:</strong> admin/admin123, user1/password123, john_doe/secret456</p>
+
+            <h3>Login Form (Vulnerable)</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="examples">
+                <h4>🔥 Try these SQL injection payloads:</h4>
+                <div class="code">Username: admin'--</div>
+                <div class="code">Username: ' OR '1'='1</div>
+                <div class="code">Username: ' UNION SELECT 1,2,3,4,5--</div>
+            </div>
+
+            <h3>User Search (Vulnerable)</h3>
+            <form id="searchForm">
+                <div class="form-group">
+                    <label>Search Users:</label>
+                    <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter username or email">
+                </div>
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="examples">
+                <h4>🔥 Try these payloads:</h4>
+                <div class="code">' UNION SELECT username,password,role FROM users--</div>
+                <div class="code">' OR 1=1--</div>
+            </div>
+
+            <div id="sqlResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>🎭 Cross-Site Scripting (XSS) Demo</h2>
+
+            <h3>Create Post (Stored XSS)</h3>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" id="postTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Content:</label>
+                    <textarea id="postContent" name="content" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Author:</label>
+                    <input type="text" id="postAuthor" name="author" required>
+                </div>
+                <button type="submit">Create Post</button>
+                <button type="button" onclick="loadPosts()">Load All Posts</button>
+            </form>
+
+            <div class="examples">
+                <h4>🔥 Try these XSS payloads:</h4>
+                <div class="code">&lt;script&gt;alert('XSS!')&lt;/script&gt;</div>
+                <div class="code">&lt;img src=x onerror=alert('XSS')&gt;</div>
+                <div class="code">&lt;svg onload=alert('XSS')&gt;</div>
+            </div>
+
+            <div id="postsDisplay" style="border: 1px solid #ddd; padding: 15px; margin: 15px 0; min-height: 200px; background: white;"></div>
+
+            <h3>Reflected XSS Test</h3>
+            <button onclick="testReflectedXSS()" class="danger">Test Reflected XSS</button>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <h3>🛠️ Additional Testing</h3>
+            <button onclick="viewAllUsers()">View All Users</button>
+            <button onclick="window.open('/welcome?name=TestUser', '_blank')">Test Welcome Page</button>
+            <button onclick="window.open('/posts', '_blank')">View Posts (Raw)</button>
+        </div>
+    </div>
+
+    <script>
+        // SQL Injection Demo - Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) { displayResult('sqlResult', result); })
+            .catch(function(error) { displayResult('sqlResult', { error: 'Request failed', details: error.message }); });
+        });
+
+        // SQL Injection Demo - Search
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var query = document.getElementById('searchQuery').value;
+
+            fetch('/search-users?query=' + encodeURIComponent(query))
+            .then(function(response) { return response.json(); })
+            .then(function(result) { displayResult('sqlResult', result); })
+            .catch(function(error) { displayResult('sqlResult', { error: 'Request failed', details: error.message }); });
+        });
+
+        // XSS Demo - Post Creation
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var title = document.getElementById('postTitle').value;
+            var content = document.getElementById('postContent').value;
+            var author = document.getElementById('postAuthor').value;
+
+            fetch('/create-post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: title, content: content, author: author })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) {
+                displayResult('postsDisplay', result);
+                if (result.success) {
+                    document.getElementById('postForm').reset();
+                    setTimeout(loadPosts, 1000);
+                }
+            })
+            .catch(function(error) { displayResult('postsDisplay', { error: 'Request failed', details: error.message }); });
+        });
+
+        function loadPosts() {
+            fetch('/posts')
+            .then(function(response) { return response.text(); })
+            .then(function(html) { document.getElementById('postsDisplay').innerHTML = html; })
+            .catch(function(error) { document.getElementById('postsDisplay').innerHTML = '<div style="color: red;">Error: ' + error.message + '</div>'; });
+        }
+
+        function testReflectedXSS() {
+            var payload = '<script>alert("Reflected XSS!")</script>';
+            window.open('/welcome?name=' + encodeURIComponent(payload), '_blank');
+        }
+
+        function viewAllUsers() {
+            fetch('/api/users')
+            .then(function(response) { return response.json(); })
+            .then(function(users) { displayResult('sqlResult', { message: 'All users retrieved', users: users }); })
+            .catch(function(error) { displayResult('sqlResult', { error: 'Failed to fetch users', details: error.message }); });
+        }
+
+        function displayResult(elementId, data) {
+            var element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+
+        // Load posts on page load
+        window.addEventListener('load', loadPosts);
+    </script>
+</body>
+</html>
