@@ -10,6 +10,7 @@ function getUserByName(db, username) {
     });
 }
 
+
 // Example of XSS vulnerability
 function displayUserContent(content) {
     document.getElementById('content').innerHTML = content;

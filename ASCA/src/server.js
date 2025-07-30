@@ -18,6 +18,7 @@ app.use(cors({
 }));
 app.use(express.static('public'));
 
+
 // Database setup
 // VULNERABILITY: Weak permissions (Low Severity)
 // Should set proper file permissions but doesn't
@@ -66,6 +67,7 @@ db.serialize(() => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 
 // SECURE ENDPOINT 1: Login with parameterized queries
 app.post('/login', (req, res) => {

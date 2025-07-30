@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "colors": "1.4.0",
+    "coa": "3.0.1",
     "malicious-dependency-simulation": "github:fake-user/malicious-package#main",
-    "lodash": "4.17.19"
+    "lodash": "4.17.11"
   },
   "keywords": [
     "security",
