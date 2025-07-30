@@ -20,14 +20,17 @@ services:
 
   # VULNERABILITY: Adminer database management exposed (Medium Severity)
   adminer:
-    image: adminer:latest
+    image: adminer:5.2.1
     ports:
       - "8080:8080"
     depends_on:
       - db
 
+
   # VULNERABILITY: Redis instance with no password (Medium Severity)
   redis:
-    image: redis:alpine
+    image: redis:bookworm
     ports:
       - "6379:6379"
+
+
