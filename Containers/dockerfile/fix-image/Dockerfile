@@ -2,7 +2,7 @@
 # Build the solution
 #============================
 FROM checkmarx.jfrog.io/ast-docker/chainguard/go-fips:1.24.5.1-r0@sha256:a486d1d5281fbee7fcb232f321c29e8c29fcdd5401530948960b19d3a0132603 as build-env
-SER root
+USER root
 
 ARG GIT_USER
 ARG GIUT_TOKEN
@@ -49,7 +49,6 @@ FROM test AS publish
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go mod vendor && \
     go build -ldflags="-s -w" -a -installsuffix cgo -o containers-worker cmd/main.go cmd/config.go
 
---missing 1
 #============================
 # Service runtime
 #============================
@@ -64,9 +63,6 @@ LABEL cx.release-tag ${RELEASE_TAG}
 COPY --from=publish /app/containers-worker /app/containers-worker
 #RUN setcap 'cap_net_bind_service=+ep' /app/containers-worker
 
-
---missing 1
---missing 2
 
 EXPOSE 80
 
