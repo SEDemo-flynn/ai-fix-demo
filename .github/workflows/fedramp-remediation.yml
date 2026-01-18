@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run FedRAMP Remediation Agent
-        uses: CheckmarxDev/fedramp-remediation-agent@master
+        uses: CheckmarxDev/fedramp-remediation-agent@GHAction
         with:
           jira_base_url: ${{ secrets.JIRA_BASE_URL }}
           jira_email: ${{ secrets.JIRA_EMAIL }}
