@@ -16,7 +16,7 @@ jobs:
         uses: CheckmarxDev/fedramp-remediation-agent@GHAction
         with:
           jira_base_url: ${{ secrets.JIRA_BASE_URL }}
-          jira_email: ${{ secrets.JIRA_EMAIL }}
+          jira_email: ${{ secrets.JIRA_USER_EMAIL }}
           jira_apikey: ${{ secrets.JIRA_API_TOKEN }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
