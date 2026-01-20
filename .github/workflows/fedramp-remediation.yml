@@ -26,6 +26,7 @@ jobs:
       - name: Run FedRAMP Remediation Agent
         uses: CheckmarxDev/fedramp-remediation-agent@GHAction
         with:
+          github_token: ${{ secrets.FEDRAMP_PAT }}
           jira_base_url: ${{ secrets.JIRA_BASE_URL }}
           jira_email: ${{ secrets.JIRA_USER_EMAIL }}
           jira_apikey: ${{ secrets.JIRA_API_TOKEN }}
