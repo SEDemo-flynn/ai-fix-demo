@@ -9,6 +9,43 @@ from billiard import Pool
 import kombu
 import billiard
 
+import sys, platform
+import celery as _celery_pkg
+import kombu as _kombu_pkg
+import billiard as _billiard_pkg
+
+def _fail_version(msg: str):
+    raise RuntimeError(
+        f"[VersionGuard] {msg}\n"
+        f"Update/remove this guard when upgrading package versions."
+    )
+
+# Lock to your current, pre-upgrade environment.
+# Any upgrade will trigger a startup failure until you update these pins.
+_REQUIRED = {
+    "python_major_minor": (3, 8),   # Python 3.8.x only
+    "celery":   "5.3.0",
+    "kombu":    "5.2.4",
+    "billiard": "3.6.4",
+}
+
+# Python check (major.minor)
+_py_mm = (sys.version_info.major, sys.version_info.minor)
+if _py_mm != _REQUIRED["python_major_minor"]:
+    _fail_version(
+        f"Python {platform.python_version()} detected, "
+        f"required Python {_REQUIRED['python_major_minor'][0]}.{_REQUIRED['python_major_minor'][1]}"
+    )
+
+# Package exact version checks
+if _celery_pkg.__version__ != _REQUIRED["celery"]:
+    _fail_version(f"celery=={_celery_pkg.__version__} found; required celery=={_REQUIRED['celery']}")
+if _kombu_pkg.__version__ != _REQUIRED["kombu"]:
+    _fail_version(f"kombu=={_kombu_pkg.__version__} found; required kombu=={_REQUIRED['kombu']}")
+if _billiard_pkg.__version__ != _REQUIRED["billiard"]:
+    _fail_version(f"billiard=={_billiard_pkg.__version__} found; required billiard=={_REQUIRED['billiard']}")
+
+
 app = Flask(__name__)
 
 celery_app = Celery(
