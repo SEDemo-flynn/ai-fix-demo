@@ -1,6 +1,5 @@
 """
-Simple Python Flask application
-Demonstrates Pillow vulnerability that requires base image upgrade
+Simple Python Flask application with image processing
 """
 from flask import Flask, jsonify
 import PIL
@@ -22,13 +21,9 @@ def health():
 
 @app.route('/version')
 def version():
-    pillow_ver = PIL.__version__
-    is_vulnerable = pillow_ver.startswith('9.')
-
     return jsonify({
-        'pillow': pillow_ver,
-        'status': 'VULNERABLE - Multiple CVEs' if is_vulnerable else 'Fixed',
-        'note': 'Pillow 10.0+ (fixed) requires Python 3.8+, but this image uses Python 3.7'
+        'pillow': PIL.__version__,
+        'python': '3.7'
     })
 
 if __name__ == '__main__':

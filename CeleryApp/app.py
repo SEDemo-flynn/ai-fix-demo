@@ -1,6 +1,5 @@
 """
 Celery Task Queue Application
-Demonstrates Celery vulnerability requiring both code changes AND base image upgrade
 """
 from flask import Flask, jsonify
 from celery import Celery
@@ -8,14 +7,12 @@ import celery
 
 app = Flask(__name__)
 
-# VULNERABLE CODE - Old Celery 5.3.x API
 celery_app = Celery(
     'tasks',
     broker='redis://localhost:6379/0',
     backend='redis://localhost:6379/0'
 )
 
-# Old-style task definition (Celery 5.3.x)
 @celery_app.task
 def add_numbers(x, y):
     """Simple task that adds two numbers"""
@@ -37,11 +34,10 @@ def health():
 def version():
     celery_ver = celery.__version__
     is_vulnerable = celery_ver.startswith('5.3')
-    
+
     return jsonify({
         'celery': celery_ver,
-        'status': 'VULNERABLE' if is_vulnerable else 'Fixed',
-        'note': 'Celery 5.6+ (fixed) requires Python 3.9+ AND code changes'
+        'status': 'VULNERABLE' if is_vulnerable else 'Fixed'
     })
 
 @app.route('/task/add/<int:x>/<int:y>')

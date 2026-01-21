@@ -1,6 +1,4 @@
-# VULNERABLE VERSION
 # Uses Python 3.8 with Celery 5.3.0
-# Celery 5.6+ (fixed) requires Python 3.9+ AND has breaking API changes
 FROM python:3.8-slim
 
 WORKDIR /app
