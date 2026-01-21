@@ -5,7 +5,11 @@ A simple Flask application with Celery for asynchronous task processing.
 ## 📋 Setup
 
 - **Base Image**: `python:3.8-slim`
-- **Package**: `celery==5.3.0`
+- **Packages**:
+  - `celery==5.3.0`
+  - `kombu==5.2.4` (message queue library)
+  - `billiard==3.6.4` (process pool library)
+  - `redis==4.5.0`
 
 ## 🔧 Files
 
@@ -28,8 +32,10 @@ curl http://localhost:5000/version
 
 ## 📡 Endpoints
 
-- `GET /` - Home endpoint
+- `GET /` - Home endpoint with all package versions
 - `GET /health` - Health check
-- `GET /version` - Version information
+- `GET /version` - Detailed version information
 - `GET /task/add/<x>/<y>` - Create async task to add two numbers
+- `GET /queue/inspect` - Inspect message queue (uses kombu)
+- `GET /workers/info` - Get worker pool information (uses billiard)
 
