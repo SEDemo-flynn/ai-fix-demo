@@ -1,4 +1,4 @@
 flask==2.3.0
 werkzeug==2.3.0
-pillow==9.5.0
+pillow==10.0.0
 
