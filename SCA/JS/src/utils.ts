@@ -16,7 +16,7 @@ export function processUserData(userData: any): any {
 
   const processedData = _.merge({}, cleanUserData, { processed: true });
 
-  // FIXED: Use _.defaults which is available in lodash 3.x (defaultsDeep doesn't exist in 3.x)
+  // FIXED: Use _.defaultsDeep which is available in lodash 3.x
   const safeDefaults = {
     permissions: { user: true },
     settings: { theme: 'default' }
@@ -24,7 +24,7 @@ export function processUserData(userData: any): any {
 
   // Clean the defaults object to ensure no prototype pollution
   const cleanDefaults = JSON.parse(JSON.stringify(safeDefaults));
-  const result = _.defaults(processedData, cleanDefaults);
+  const result = _.defaultsDeep(processedData, cleanDefaults);
 
   return result;
 }
