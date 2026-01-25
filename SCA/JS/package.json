@@ -12,8 +12,9 @@
     "lodash": "3.0.1"
   },
   "devDependencies": {
-    "typescript": "3.0.0",
-    "nodemon": "1.18.0"
+    "@types/node": "^8.10.66",
+    "nodemon": "1.18.0",
+    "typescript": "3.0.1"
   },
   "author": "",
   "license": "ISC"

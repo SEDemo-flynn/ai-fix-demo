@@ -102,8 +102,8 @@ app.get('/api/user/:id', async (req: express.Request, res: express.Response) => 
     const processedData = processUserData(mockUserData);
 
     res.json(processedData);
-  } catch (error: any) {
-    res.status(500).send(error.message);
+  } catch (error) {
+    res.status(500).send((error as any).message);
   }
 });
 
