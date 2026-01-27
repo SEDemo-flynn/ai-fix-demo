@@ -24,7 +24,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Run FedRAMP Remediation Agent
-        uses: CheckmarxDev/fedramp-remediation-agent@master
+        uses: CheckmarxDev/fedramp-remediation-agent@groundcoverForFedrampAgent
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           jira_base_url: ${{ vars.JIRA_BASE_URL_FEDRAMP }}
