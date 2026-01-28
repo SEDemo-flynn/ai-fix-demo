@@ -30,4 +30,7 @@ jobs:
           jira_base_url: ${{ vars.JIRA_BASE_URL_FEDRAMP }}
           jira_email: ${{ secrets.JIRA_USER_EMAIL_FEDRAMP }}
           jira_apikey: ${{ secrets.JIRA_API_TOKEN_FEDRAMP }}
+          otel_endpoint: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          groundcover_api_key: ${{ secrets.GROUNDCOVER_API_KEY }}
+          groundcover_backend_id: ${{ secrets.GROUNDCOVER_BACKEND_ID }}
 
