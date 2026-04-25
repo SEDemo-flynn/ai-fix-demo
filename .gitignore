@@ -17,7 +17,7 @@ build/
 *.tsbuildinfo
 
 # IDE files
-.vscode/
+# .vscode/
 .idea/
 *.swp
 *.swo
