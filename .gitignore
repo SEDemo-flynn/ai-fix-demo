@@ -17,7 +17,8 @@ build/
 *.tsbuildinfo
 
 # IDE files
-# .vscode/
+# .vscode
+.vscode/.checkmarxIgnored
 .idea/
 *.swp
 *.swo
