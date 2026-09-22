@@ -1,9 +1,8 @@
-// Example of SQL injection vulnerability
+// Parameterized query to prevent SQL injection (CWE-89)
 function getUserByName(db, username) {
-    const query = `SELECT * FROM users WHERE username = '${username}'`;
-    // VULNERABILITY: Direct string concatenation allows SQL injection (Medium Severity)
+    const query = 'SELECT * FROM users WHERE username = ?';
     return new Promise((resolve, reject) => {
-        db.all(query, (err, rows) => {
+        db.all(query, [username], (err, rows) => {
             if (err) reject(err);
             else resolve(rows);
         });
